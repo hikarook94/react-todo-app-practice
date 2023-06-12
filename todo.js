@@ -1,4 +1,3 @@
-// Write your code
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -22,9 +21,8 @@ class Board extends React.Component {
     }
     this.setState({todos: todos.concat(newTodo)});
   }
-  handleDelete(event) {
-    console.log('Board handleDelete', event.target);
-    const newTodos = this.state.todos.filter(todo => todo.id !== 999)
+  handleDelete(removeId) {
+    const newTodos = this.state.todos.filter(todo => todo.id !== removeId)
     this.setState({todos: newTodos})
   }
 
@@ -44,7 +42,7 @@ function TodoList(props) {
     <ToDo key={todo.id} todo={todo} onDelete={props.onDelete}></ToDo>
   )
   return (
-    <ul>{listItems}</ul>
+    <ul className="todo-list">{listItems}</ul>
   )
 }
 
@@ -68,7 +66,8 @@ class ToDo extends React.Component {
   handleChange(event) {
     this.setState({title: event.target.value})
   }
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     this.setState({edit: false})
   }
   handleClick() {
@@ -77,35 +76,35 @@ class ToDo extends React.Component {
   handleCheck() {
     this.setState({isDone: !this.state.isDone})
   }
-  handleDelete(todoId) {
-    this.state.onDelete(todoId)
+  handleDelete() {
+    this.state.onDelete(this.state.id)
   }
 
   todoForm() {
     return (
-      <form>
+      <form className="add-todo-form">
         <label>
-          <input type="text" value={this.state.title} onChange={this.handleChange} />
+          <input type="text" value={this.state.title} onChange={this.handleChange} className="add-todo-input"/>
         </label>
-        <input type="submit" value="Submit" onClick={this.handleSubmit} />
+        <input type="submit" value="追加" onClick={this.handleSubmit} className="add-todo-btn"/>
       </form>
     )
   }
   todoTitle() {
     return (
       <div>
-        <input type="checkbox" checked={this.state.isDone} onChange={this.handleCheck} />
-        <span onClick={this.handleClick}>
+        <input type="checkbox" checked={this.state.isDone} onChange={this.handleCheck} className="checkbox" />
+        <span onClick={this.handleClick} className={`task ${this.state.isDone ? "completed" : ""}`}>
           {this.state.title}
         </span>
-        <button type="button" onClick={this.handleDelete}>削除</button>
+        <button type="button" onClick={this.handleDelete} className="delete-btn">削除</button>
       </div>
     )
   }
 
   render() {
     return (
-      <li>{this.state.edit? this.todoForm() : this.todoTitle()}</li>
+      <li className="todo-item">{this.state.edit? this.todoForm() : this.todoTitle()}</li>
     );
   };
 }
