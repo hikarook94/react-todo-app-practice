@@ -1,7 +1,7 @@
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    const todos = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : []
+    const todos = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : [];
     this.state = {
       todos: todos,
     };
@@ -10,20 +10,20 @@ class Board extends React.Component {
   }
 
   handleClick() {
-    const todos = this.state.todos
-    const todoIds = todos.map((todo) => todo.id)
-    const nextId = todos.length ? Math.max(...todoIds) + 1 : 0
+    const todos = this.state.todos;
+    const todoIds = todos.map((todo) => todo.id);
+    const nextId = todos.length ? Math.max(...todoIds) + 1 : 0;
     const newTodo = {
       id: nextId,
       title: '',
       isDone: false,
       edit: true,
-    }
-    this.setState({todos: todos.concat(newTodo)});
+    };
+    this.setState({ todos: todos.concat(newTodo) });
   }
   handleDelete(removeId) {
-    const newTodos = this.state.todos.filter(todo => todo.id !== removeId)
-    this.setState({todos: newTodos})
+    const newTodos = this.state.todos.filter((todo) => todo.id !== removeId);
+    this.setState({ todos: newTodos });
   }
 
   render() {
@@ -31,19 +31,19 @@ class Board extends React.Component {
       <div>
         <h1>ToDoアプリ</h1>
         <TodoList todos={this.state.todos} onDelete={this.handleDelete}></TodoList>
-        <button type="button" onClick={this.handleClick}>ToDoを追加</button>
+        <button type="button" onClick={this.handleClick}>
+          ToDoを追加
+        </button>
       </div>
-    )
+    );
   }
 }
 
 function TodoList(props) {
-  const listItems = props.todos.map((todo) => 
+  const listItems = props.todos.map((todo) => (
     <ToDo key={todo.id} todo={todo} onDelete={props.onDelete}></ToDo>
-  )
-  return (
-    <ul className="todo-list">{listItems}</ul>
-  )
+  ));
+  return <ul className="todo-list">{listItems}</ul>;
 }
 
 class ToDo extends React.Component {
@@ -55,7 +55,7 @@ class ToDo extends React.Component {
       edit: props.todo.edit,
       isDone: props.todo.isDone,
       onDelete: props.onDelete,
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,49 +64,59 @@ class ToDo extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({title: event.target.value})
+    this.setState({ title: event.target.value });
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({edit: false})
+    this.setState({ edit: false });
   }
   handleClick() {
-    this.setState({edit: true})
+    this.setState({ edit: true });
   }
   handleCheck() {
-    this.setState({isDone: !this.state.isDone})
+    this.setState({ isDone: !this.state.isDone });
   }
   handleDelete() {
-    this.state.onDelete(this.state.id)
+    this.state.onDelete(this.state.id);
   }
 
   todoForm() {
     return (
       <form className="add-todo-form">
         <label>
-          <input type="text" value={this.state.title} onChange={this.handleChange} className="add-todo-input"/>
+          <input
+            type="text"
+            value={this.state.title}
+            onChange={this.handleChange}
+            className="add-todo-input"
+          />
         </label>
-        <input type="submit" value="追加" onClick={this.handleSubmit} className="add-todo-btn"/>
+        <input type="submit" value="追加" onClick={this.handleSubmit} className="add-todo-btn" />
       </form>
-    )
+    );
   }
   todoTitle() {
     return (
       <div>
-        <input type="checkbox" checked={this.state.isDone} onChange={this.handleCheck} className="checkbox" />
-        <span onClick={this.handleClick} className={`task ${this.state.isDone ? "completed" : ""}`}>
+        <input
+          type="checkbox"
+          checked={this.state.isDone}
+          onChange={this.handleCheck}
+          className="checkbox"
+        />
+        <span onClick={this.handleClick} className={`task ${this.state.isDone ? 'completed' : ''}`}>
           {this.state.title}
         </span>
-        <button type="button" onClick={this.handleDelete} className="delete-btn">削除</button>
+        <button type="button" onClick={this.handleDelete} className="delete-btn">
+          削除
+        </button>
       </div>
-    )
+    );
   }
 
   render() {
-    return (
-      <li className="todo-item">{this.state.edit? this.todoForm() : this.todoTitle()}</li>
-    );
-  };
+    return <li className="todo-item">{this.state.edit ? this.todoForm() : this.todoTitle()}</li>;
+  }
 }
 
 const domContainer = document.querySelector('#root');
