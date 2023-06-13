@@ -33,7 +33,6 @@ class Board extends React.Component {
     const newTodos = this.state.todos.map((todo) =>
       todo.id === updatedTodo.id ? updatedTodo : todo
     );
-    console.log('Board handleUpdate newTodos', newTodos);
     this.setState({ todos: newTodos }, this.saveTodos);
   }
 
