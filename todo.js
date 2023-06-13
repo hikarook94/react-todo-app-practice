@@ -6,7 +6,11 @@ class Board extends React.Component {
       todos: todos,
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.handleClick = this.handleClick.bind(this);
+  }
+  saveTodos() {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
 
   handleClick() {
@@ -16,21 +20,32 @@ class Board extends React.Component {
     const newTodo = {
       id: nextId,
       title: '',
-      isDone: false,
       edit: true,
+      isDone: false,
     };
     this.setState({ todos: todos.concat(newTodo) });
   }
   handleDelete(removeId) {
     const newTodos = this.state.todos.filter((todo) => todo.id !== removeId);
-    this.setState({ todos: newTodos });
+    this.setState({ todos: newTodos }, this.saveTodos);
+  }
+  handleUpdate(updatedTodo) {
+    const newTodos = this.state.todos.map((todo) =>
+      todo.id === updatedTodo.id ? updatedTodo : todo
+    );
+    console.log('Board handleUpdate newTodos', newTodos);
+    this.setState({ todos: newTodos }, this.saveTodos);
   }
 
   render() {
     return (
       <div>
         <h1>ToDoアプリ</h1>
-        <TodoList todos={this.state.todos} onDelete={this.handleDelete}></TodoList>
+        <TodoList
+          todos={this.state.todos}
+          onDelete={this.handleDelete}
+          onUpdate={this.handleUpdate}
+        ></TodoList>
         <button type="button" onClick={this.handleClick}>
           ToDoを追加
         </button>
@@ -41,7 +56,7 @@ class Board extends React.Component {
 
 function TodoList(props) {
   const listItems = props.todos.map((todo) => (
-    <ToDo key={todo.id} todo={todo} onDelete={props.onDelete}></ToDo>
+    <ToDo key={todo.id} todo={todo} onDelete={props.onDelete} onUpdate={props.onUpdate}></ToDo>
   ));
   return <ul className="todo-list">{listItems}</ul>;
 }
@@ -55,12 +70,14 @@ class ToDo extends React.Component {
       edit: props.todo.edit,
       isDone: props.todo.isDone,
       onDelete: props.onDelete,
+      onUpdate: props.onUpdate,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   handleChange(event) {
@@ -69,15 +86,22 @@ class ToDo extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ edit: false });
+    this.handleUpdate({ edit: false });
   }
   handleClick() {
     this.setState({ edit: true });
+    this.handleUpdate({ edit: false });
   }
   handleCheck() {
     this.setState({ isDone: !this.state.isDone });
+    this.handleUpdate({ isDone: !this.state.isDone });
   }
   handleDelete() {
     this.state.onDelete(this.state.id);
+  }
+  handleUpdate(obj) {
+    const newToDo = { ...this.state, ...obj };
+    this.state.onUpdate(newToDo);
   }
 
   todoForm() {
