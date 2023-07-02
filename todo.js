@@ -20,7 +20,7 @@ class Board extends React.Component {
     const newTodo = {
       id: nextId,
       title: '',
-      edit: true,
+      isEditing: true,
       isDone: false,
     };
     this.setState({ todos: todos.concat(newTodo) });
@@ -55,28 +55,25 @@ class Board extends React.Component {
 
 function TodoList(props) {
   const listItems = props.todos.map((todo) => (
-    <ToDo key={todo.id} todo={todo} onDelete={props.onDelete} onUpdate={props.onUpdate}></ToDo>
+    <Todo key={todo.id} todo={todo} onDelete={props.onDelete} onUpdate={props.onUpdate}></Todo>
   ));
   return <ul className="todo-list">{listItems}</ul>;
 }
 
-class ToDo extends React.Component {
+class Todo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.todo.id,
       title: props.todo.title,
-      edit: props.todo.edit,
+      isEditing: props.todo.isEditing,
       isDone: props.todo.isDone,
-      onDelete: props.onDelete,
-      onUpdate: props.onUpdate,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
   }
 
   handleChange(event) {
@@ -84,23 +81,23 @@ class ToDo extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({ edit: false });
-    this.handleUpdate({ edit: false });
+    this.setState({ isEditing: false });
+    this.updateTodo({ isEditing: false });
   }
   handleClick() {
-    this.setState({ edit: true });
-    this.handleUpdate({ edit: false });
+    this.setState({ isEditing: true });
+    this.updateTodo({ isEditing: false });
   }
   handleCheck() {
     this.setState({ isDone: !this.state.isDone });
-    this.handleUpdate({ isDone: !this.state.isDone });
+    this.updateTodo({ isDone: !this.state.isDone });
   }
   handleDelete() {
-    this.state.onDelete(this.state.id);
+    this.props.onDelete(this.props.todo.id);
   }
-  handleUpdate(obj) {
-    const newToDo = { ...this.state, ...obj };
-    this.state.onUpdate(newToDo);
+  updateTodo(updatedValue) {
+    const newTodo = { ...this.state, ...updatedValue, id: this.props.todo.id };
+    this.props.onUpdate(newTodo);
   }
 
   todoForm() {
@@ -138,7 +135,9 @@ class ToDo extends React.Component {
   }
 
   render() {
-    return <li className="todo-item">{this.state.edit ? this.todoForm() : this.todoTitle()}</li>;
+    return (
+      <li className="todo-item">{this.state.isEditing ? this.todoForm() : this.todoTitle()}</li>
+    );
   }
 }
 
