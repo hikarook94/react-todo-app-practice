@@ -16,7 +16,7 @@ class Board extends React.Component {
   handleClick() {
     const todos = this.state.todos;
     const todoIds = todos.map((todo) => todo.id);
-    const nextId = todos.length ? Math.max(...todoIds) + 1 : 0;
+    const nextId = todoIds.length > 0 ? Math.max(...todoIds) + 1 : 0;
     const newTodo = {
       id: nextId,
       title: '',
