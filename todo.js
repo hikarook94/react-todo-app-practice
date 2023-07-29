@@ -39,14 +39,14 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <h1>ToDoアプリ</h1>
+        <h1>Todoアプリ</h1>
         <TodoList
           todos={this.state.todos}
           onDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
         ></TodoList>
         <button type="button" onClick={this.handleClick}>
-          ToDoを追加
+          Todoを追加
         </button>
       </div>
     );
