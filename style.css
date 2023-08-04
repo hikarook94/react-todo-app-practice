@@ -1,1 +1,59 @@
-/* Write your CSS if you want */
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.todo-item .checkbox {
+  margin-right: 10px;
+}
+
+.todo-item .task {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.todo-item .delete-btn {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.add-todo-form {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.add-todo-input {
+  flex-grow: 1;
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.add-todo-btn {
+  background-color: #008cff;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-todo-btn:hover {
+  background-color: #0065cc;
+}
